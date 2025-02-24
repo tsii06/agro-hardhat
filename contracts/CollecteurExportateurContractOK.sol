@@ -94,9 +94,6 @@ contract CollecteurExportateurContrat {
         acteurs[_acteur] = Acteur(_acteur, _role);
         emit ActeurEnregistre(_acteur, _role);
     }
-    function getActeur(address _addr) public view returns (Acteur memory) {
-        return acteurs[_addr];
-    }
 
     // Modifie la fonction qui passe une commande
     function passerCommande(uint idProduit, uint _quantite) public seulementExportateur {
@@ -115,7 +112,9 @@ contract CollecteurExportateurContrat {
         emit CommandePasser(_exportateur.addr, idProduit);
     }
 
-    function ajouterProduit(string memory _nom, uint _quantite, uint _prix, uint _idParcelle, uint _dateRecolte, string memory _certificatPhytosanitaire) public seulementCollecteur {
+    function ajouterProduit(uint _idParcelle, uint _quantite, uint _prix) public seulementCollecteur {
+        (string memory _qualiteSemence, string memory _methodeCulture, string memory _latitude, string memory _longitude, string memory _nom, uint _dateRecolte, string memory _certificatPhytosanitaire) = ProducteurEnPhaseCulture(producteurEnPhaseCultureAddress).obtenirInformationsParcelle(_idParcelle);
+
         compteurProduits++;
         produits[compteurProduits] = Produit(compteurProduits, _nom, _quantite, _prix, StatutProduit.EnAttente, _idParcelle, _dateRecolte, _certificatPhytosanitaire, msg.sender);
         emit ProduitAjoute(compteurProduits, _nom, _quantite, _prix, _idParcelle, _dateRecolte, _certificatPhytosanitaire);
