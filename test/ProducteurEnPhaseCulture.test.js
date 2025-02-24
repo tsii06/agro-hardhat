@@ -72,4 +72,51 @@ describe("ProducteurEnPhaseCulture", function () {
             expect(parcelle.dateRecolte).to.equal("12/12/25");
         })
     });
+
+
+    describe("mettreAJourEtape()", function () {
+        it("Seul un producteur peut mettre a jour l'etape", async function () {
+            // creation d'un producteur
+            await contrat.enregistrerActeur(addr1, 0);
+            // creation parcelle
+            await contrat.connect(addr1).creerParcelle("bon", "sur brulis", "latitude", "longitude", "nomProduit", "12/12/25", "certificate");
+
+            // faire appel a la fonction mettreAJourEtape() par le producteur
+            await contrat.connect(addr1).mettreAJourEtape(parseInt(await contrat.compteurParcelles()), 1);
+        })
+
+        it("Verifie si l'evenemet EtapeMiseAJour a ete bien emis", async function () {
+            // creation d'un producteur
+            await contrat.enregistrerActeur(addr1, 0);
+            // creation parcelle
+            await contrat.connect(addr1).creerParcelle("bon", "sur brulis", "latitude", "longitude", "nomProduit", "12/12/25", "certificate");
+
+            // faire appel a la fonction mettreAJourEtape() par le producteur
+            const tx = await contrat.connect(addr1).mettreAJourEtape(parseInt(await contrat.compteurParcelles()), 1);
+
+            // verifie si l'evenement a bien ete emis
+            expect(tx)
+                .to.emit(contrat, "EtapeMiseAJour")
+                .withArgs(parseInt(await contrat.compteurParcelles()), 1)
+        })
+
+        it("Verifie si l'etape a bien ete mise a jour", async function () {
+            // creation d'un producteur
+            await contrat.enregistrerActeur(addr1, 0);
+            // creation parcelle
+            await contrat.connect(addr1).creerParcelle("bon", "sur brulis", "latitude", "longitude", "nomProduit", "12/12/25", "certificate");
+            // recuperer la parcelle
+            let parcelle = await contrat.parcelles(parseInt(await contrat.compteurParcelles()));
+
+            // verifie si l'etape a ete initialiser a 0
+            expect(parcelle.etape).to.equal(0);
+            
+            // faire appel a la fonction mettreAJourEtape() par le producteur
+            const tx = await contrat.connect(addr1).mettreAJourEtape(parcelle.id, 2);
+            
+            // verifie si l'etape a ete mise a jour
+            parcelle = await contrat.parcelles(parcelle.id);
+            expect(parcelle.etape).to.equal(2);
+        })
+    });
 });
