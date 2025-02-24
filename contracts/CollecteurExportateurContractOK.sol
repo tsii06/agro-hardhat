@@ -61,7 +61,6 @@ contract CollecteurExportateurContrat {
     uint public compteurPaiements;
 
     address public producteurEnPhaseCultureAddress;
-    address public proxyAddress;
 
     event ActeurEnregistre(address indexed acteur, Role role);
     event ProduitAjoute(uint indexed idProduit, string nom, uint quantite, uint prix, uint idParcelle, uint dateRecolte, string certificatPhytosanitaire);
@@ -87,9 +86,8 @@ contract CollecteurExportateurContrat {
         _;
     }
 
-    constructor(address _producteurEnPhaseCultureAddress, address _proxyAddress) {
+    constructor(address _producteurEnPhaseCultureAddress) {
         producteurEnPhaseCultureAddress = _producteurEnPhaseCultureAddress;
-        proxyAddress = _proxyAddress;
     }
 
     function enregistrerActeur(address _acteur, Role _role) public {
@@ -155,11 +153,6 @@ contract CollecteurExportateurContrat {
     function mettreAJourStatutTransport(uint _idCommande, StatutTransport _statut) public seulementTransporteur {
         commandes[_idCommande].statutTransport = _statut;
         emit StatutTransportMisAJour(_idCommande, _statut);
-    }
-
-    function mettreAJourImplementation(address _nouvelleImplementation) public {
-        (bool success, ) = proxyAddress.call(abi.encodeWithSignature("updateImplementation(address)", _nouvelleImplementation));
-        require(success, "Echec de la mise a jour de l'implementation");
     }
 }
 
