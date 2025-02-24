@@ -58,5 +58,18 @@ describe("ProducteurEnPhaseCulture", function () {
                 .to.emit(contrat, "ParcelleCree") // verifie si l'evenement a ete bien emis.
                 .withArgs(parseInt(await contrat.compteurParcelles()), "latitude", "longitude"); // avec les bons arguments
         })
+
+        it("Verifie qu'un parcelle a ete bien creer", async function () {
+            await contrat.enregistrerActeur(addr1, 0); // enregistre un producteur.
+            await contrat.connect(addr1).creerParcelle("bon", "sur brulis", "latitude", "longitude", "nomProduit", "12/12/25", "certificate"); // creer un parcelle
+
+            const compteurParcelles = parseInt(await contrat.compteurParcelles());
+            // recuperer le parcelle
+            const parcelle = await contrat.parcelles(compteurParcelles); 
+
+            // Verifie si c'est bien la parcelle creer.
+            expect(parcelle.id).to.equal(compteurParcelles);
+            expect(parcelle.dateRecolte).to.equal("12/12/25");
+        })
     });
 });
