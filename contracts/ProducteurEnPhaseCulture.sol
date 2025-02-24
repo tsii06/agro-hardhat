@@ -45,7 +45,7 @@ contract ProducteurEnPhaseCulture {
         Inspection[] inspections;
         EnregistrementCondition[] conditions;
         string produit;
-        uint dateRecolte;
+        string dateRecolte;
         string certificatPhytosanitaire;
     }
 
@@ -121,7 +121,7 @@ contract ProducteurEnPhaseCulture {
         string memory _latitude,
         string memory _longitude,
         string memory _produit,
-        uint _dateRecolte,
+        string memory _dateRecolte,
         string memory _certificatPhytosanitaire
     ) public seulementProducteur {
         compteurParcelles++;
@@ -204,7 +204,7 @@ contract ProducteurEnPhaseCulture {
         string memory latitude,
         string memory longitude,
         string memory produit,
-        uint dateRecolte,
+        string memory dateRecolte,
         string memory certificatPhytosanitaire
     ) {
         Parcelle storage parcelle = parcelles[_idParcelle];

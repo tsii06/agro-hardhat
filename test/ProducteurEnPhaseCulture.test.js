@@ -31,7 +31,7 @@ describe("ProducteurEnPhaseCulture", function () {
     describe("creerParcelle()", function () {
         it("Seul un producteur peut creer un parcelle", async function () {
             await contrat.enregistrerActeur(addr1, 0); // enregistre un producteur.
-            await contrat.connect(addr1).creerParcelle("bon", "sur brulis", "latitude", "longitude", "nomProduit", 12, "certificate"); // creer un parcelle a partir du producteur.
+            await contrat.connect(addr1).creerParcelle("bon", "sur brulis", "latitude", "longitude", "nomProduit", "12/12/25", "certificate"); // creer un parcelle a partir du producteur.
         })
     });
 });
