@@ -209,4 +209,22 @@ describe("ProducteurEnPhaseCulture", function () {
                 .withArgs(idParcelle, true);
         })
     });
+
+
+    describe("ajouterPhoto()", function () {
+        let producteur, idParcelle;
+        this.beforeEach(async function () {
+            producteur = addr0;
+            // enregistrer un producteur
+            await contrat.enregistrerActeur(producteur, 0);
+            // creer parcelle
+            await contrat.connect(producteur).creerParcelle("bon", "sur brulis", "latitude", "longitude", "nomProduit", "12/12/25", "certificate");
+            // recuperer l'id du parcelle
+            idParcelle = parseInt(await contrat.compteurParcelles());
+        })
+
+        it("Seul un producteur peut ajouter un photo", async function () {
+            await contrat.connect(producteur).ajouterPhoto(idParcelle, "urlPhoto");
+        })
+    });
 });

@@ -35,6 +35,8 @@ Decrit les tests unitaires effectues sur les smart contracts du projet.
 |---------------------------------------|---------------------------------------------------------------|
 | confirmerRecolte()                    | Seul un certificateur peut confirmer la qualite de la recolte |
 |                                       | Verifie si l'evenemet RecolteConfirmee a ete bien emis        |
+|---------------------------------------|---------------------------------------------------------------|
+| ajouterPhoto()                        | Seul un producteur peut ajouter un photo                      |
 
 
 ### CollecteurExportateurContractOK
