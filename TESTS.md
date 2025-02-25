@@ -28,6 +28,10 @@ Decrit les tests unitaires effectues sur les smart contracts du projet.
 | mettreAJourEtape()                    | Seul un producteur peut mettre a jour l'etape                 |
 |                                       | Verifie si l'evenemet EtapeMiseAJour a ete bien emis          |
 |                                       | Verifie si l'etape a bien ete mise a jour                     |
+|---------------------------------------|---------------------------------------------------------------|
+| appliquerControlePhytosanitaire()     | Seul un certificateur peut controler un control phytosanitaire|
+|                                       | Verifie si l'evenemet ControlePhytosanitaire a ete bien emis  |
+|                                       | Verifie qu'un parcelle a ete bien certifiter                  |
 
 
 ### CollecteurExportateurContractOK

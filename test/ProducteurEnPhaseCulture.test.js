@@ -119,4 +119,64 @@ describe("ProducteurEnPhaseCulture", function () {
             expect(parcelle.etape).to.equal(2);
         })
     });
+
+
+    describe("appliquerControlePhytosanitaire()", function () {
+        it("Seul un certificateur peut controler un control phytosanitaire", async function () {
+            // enregistrer un certificateur
+            await contrat.enregistrerActeur(addr1, 2);
+            // enregistrer un producteur
+            await contrat.enregistrerActeur(addr0, 0);
+            // creer parcelle
+            await contrat.connect(addr0).creerParcelle("bon", "sur brulis", "latitude", "longitude", "nomProduit", "12/12/25", "certificate");
+
+            // recuperer l'id du parcelle fraichement creer
+            const idParcelle = parseInt(await contrat.compteurParcelles());
+            // mettre a jour l'etape de culture du parcelle
+            await contrat.connect(addr0).mettreAJourEtape(idParcelle, 1);
+
+            // appel la fonction appliquerControlePhytosanitaire()
+            await contrat.connect(addr1).appliquerControlePhytosanitaire(idParcelle, true);
+        })
+
+        it("Verifie si l'evenemet ControlePhytosanitaire a ete bien emis", async function () {
+            // enregistrer un certificateur
+            await contrat.enregistrerActeur(addr1, 2);
+            // enregistrer un producteur
+            await contrat.enregistrerActeur(addr0, 0);
+            // creer parcelle
+            await contrat.connect(addr0).creerParcelle("bon", "sur brulis", "latitude", "longitude", "nomProduit", "12/12/25", "certificate");
+
+            // recuperer l'id du parcelle fraichement creer
+            const idParcelle = parseInt(await contrat.compteurParcelles());
+            // mettre a jour l'etape de culture du parcelle
+            await contrat.connect(addr0).mettreAJourEtape(idParcelle, 1);
+
+            expect(contrat.connect(addr1).appliquerControlePhytosanitaire(idParcelle, true))
+                .to.emit(contrat, "ControlePhytosanitaire")
+                .withArgs(idParcelle, true);
+        })
+
+        it("Verifie qu'un parcelle a ete bien certifiter", async function () {
+            // enregistrer un certificateur
+            await contrat.enregistrerActeur(addr1, 2);
+            // enregistrer un producteur
+            await contrat.enregistrerActeur(addr0, 0);
+            // creer parcelle
+            await contrat.connect(addr0).creerParcelle("bon", "sur brulis", "latitude", "longitude", "nomProduit", "12/12/25", "certificate");
+
+            // recuperer l'id du parcelle fraichement creer
+            const idParcelle = parseInt(await contrat.compteurParcelles());
+            // mettre a jour l'etape de culture du parcelle
+            await contrat.connect(addr0).mettreAJourEtape(idParcelle, 1);
+
+            // appel la fonction appliquerControlePhytosanitaire()
+            await contrat.connect(addr1).appliquerControlePhytosanitaire(idParcelle, true);
+
+            // recuperer le parcelle certifier
+            const parcelle = await contrat.parcelles(idParcelle);
+
+            expect(parcelle.certifie).to.equal(true);
+        })
+    });
 });
