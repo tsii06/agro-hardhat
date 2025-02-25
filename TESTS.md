@@ -32,6 +32,9 @@ Decrit les tests unitaires effectues sur les smart contracts du projet.
 | appliquerControlePhytosanitaire()     | Seul un certificateur peut controler un control phytosanitaire|
 |                                       | Verifie si l'evenemet ControlePhytosanitaire a ete bien emis  |
 |                                       | Verifie qu'un parcelle a ete bien certifiter                  |
+|---------------------------------------|---------------------------------------------------------------|
+| confirmerRecolte()                    | Seul un certificateur peut confirmer la qualite de la recolte |
+|                                       | Verifie si l'evenemet RecolteConfirmee a ete bien emis        |
 
 
 ### CollecteurExportateurContractOK

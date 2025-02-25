@@ -179,4 +179,34 @@ describe("ProducteurEnPhaseCulture", function () {
             expect(parcelle.certifie).to.equal(true);
         })
     });
+
+
+    describe("confirmerRecolte()", function () {
+        let certificateur, producteur, idParcelle;
+        this.beforeEach(async function () {
+            certificateur = addr1;
+            producteur = addr0;
+            // enregistrer un certificateur
+            await contrat.enregistrerActeur(certificateur, 2);
+            // enregistrer un producteur
+            await contrat.enregistrerActeur(producteur, 0);
+            // creer parcelle
+            await contrat.connect(addr0).creerParcelle("bon", "sur brulis", "latitude", "longitude", "nomProduit", "12/12/25", "certificate");
+    
+            // recuperer l'id du parcelle fraichement creer
+            idParcelle = parseInt(await contrat.compteurParcelles());
+            // mettre a jour l'etape de culture du parcelle en recolte
+            await contrat.connect(addr0).mettreAJourEtape(idParcelle, 2);
+        })
+        
+        it("Seul un certificateur peut confirmer la qualite de la recolte", async function () {
+            await contrat.connect(certificateur).confirmerRecolte(idParcelle, true);
+        })
+
+        it("Verifie si l'evenemet RecolteConfirmee a ete bien emis", async function () {
+            expect(contrat.connect(certificateur).confirmerRecolte(idParcelle, true))
+                .to.emit(contrat, "RecolteConfirmee")
+                .withArgs(idParcelle, true);
+        })
+    });
 });
