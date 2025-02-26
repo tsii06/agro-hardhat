@@ -7,7 +7,7 @@ async function main() {
 
     // Déploiement du contrat
     const Contrat = await ethers.getContractFactory("CollecteurExportateurContrat");
-    const contrat = await Contrat.deploy(deployer.address, deployer.address);
+    const contrat = await Contrat.deploy(deployer.address);
     await contrat.waitForDeployment();
 
     console.log(`✅ Contrat déployé à l'adresse : ${await contrat.getAddress()}`);
