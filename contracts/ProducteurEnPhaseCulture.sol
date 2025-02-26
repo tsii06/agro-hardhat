@@ -144,9 +144,18 @@ contract ProducteurEnPhaseCulture {
         emit ParcelleCree(compteurParcelles, _latitude, _longitude);
     }
 
-    // les getters
+    // les getters pour les tableaux dynamiques des structs
     function getPhotos(uint idParcelle) public view seulementProducteur returns (string[] memory) {
         return parcelles[idParcelle].photos;
+    }
+    function getIntrant(uint idParcelle) public view seulementProducteur returns (Intrant[] memory) {
+        return parcelles[idParcelle].intrants;
+    }
+    function getInspection(uint idParcelle) public view seulementProducteur returns (Inspection[] memory) {
+        return parcelles[idParcelle].inspections;
+    }
+    function getCondition(uint idParcelle) public view seulementProducteur returns (EnregistrementCondition[] memory) {
+        return parcelles[idParcelle].conditions;
     }
 
     function mettreAJourEtape(uint _idParcelle, Etape _etape) public seulementProducteur {
