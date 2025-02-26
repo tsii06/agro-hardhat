@@ -19,7 +19,7 @@ contract CollecteurExportateurContrat {
         uint prix;
         StatutProduit statut;
         uint idParcelle;
-        uint dateRecolte;
+        string dateRecolte;
         string certificatPhytosanitaire;
         address collecteur;
     }
@@ -63,7 +63,7 @@ contract CollecteurExportateurContrat {
     address public producteurEnPhaseCultureAddress;
 
     event ActeurEnregistre(address indexed acteur, Role role);
-    event ProduitAjoute(uint indexed idProduit, string nom, uint quantite, uint prix, uint idParcelle, uint dateRecolte, string certificatPhytosanitaire);
+    event ProduitAjoute(uint indexed idProduit, string nom, uint quantite, uint prix, uint idParcelle, string dateRecolte, string certificatPhytosanitaire);
     event ProduitValide(uint indexed idProduit, bool valide);
     event PaiementEffectue(uint indexed idProduit, uint idPaiement, address payeur, uint montant, ModePaiement mode);
     event ConditionEnregistree(uint indexed idProduit, uint idCondition, string temperature, string humidite, uint timestamp);
@@ -113,7 +113,7 @@ contract CollecteurExportateurContrat {
     }
 
     function ajouterProduit(uint _idParcelle, uint _quantite, uint _prix) public seulementCollecteur {
-        (string memory _qualiteSemence, string memory _methodeCulture, string memory _latitude, string memory _longitude, string memory _nom, uint _dateRecolte, string memory _certificatPhytosanitaire) = ProducteurEnPhaseCulture(producteurEnPhaseCultureAddress).obtenirInformationsParcelle(_idParcelle);
+        (string memory _qualiteSemence, string memory _methodeCulture, string memory _latitude, string memory _longitude, string memory _nom, string memory _dateRecolte, string memory _certificatPhytosanitaire) = ProducteurEnPhaseCulture(producteurEnPhaseCultureAddress).obtenirInformationsParcelle(_idParcelle);
 
         compteurProduits++;
         produits[compteurProduits] = Produit(compteurProduits, _nom, _quantite, _prix, StatutProduit.EnAttente, _idParcelle, _dateRecolte, _certificatPhytosanitaire, msg.sender);
@@ -162,7 +162,7 @@ interface ProducteurEnPhaseCulture {
         string memory latitude,
         string memory longitude,
         string memory produit,
-        uint dateRecolte,
+        string memory dateRecolte,
         string memory certificatPhytosanitaire
     );
 }
