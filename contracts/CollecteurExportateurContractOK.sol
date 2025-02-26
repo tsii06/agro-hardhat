@@ -51,7 +51,7 @@ contract CollecteurExportateurContrat {
 
     mapping(address => Acteur) public acteurs;
     mapping(uint => Produit) public produits;
-    mapping(uint => EnregistrementCondition[]) public conditions;
+    mapping(uint => EnregistrementCondition) public conditions;
     mapping(uint => Paiement) public paiements;
     // Pour stocker tous les commandes du contrat
     mapping (uint => Commande) public commandes;
@@ -145,7 +145,7 @@ contract CollecteurExportateurContrat {
 
     function enregistrerCondition(uint _idProduit, string memory _temperature, string memory _humidite) public seulementTransporteur {
         compteurConditions++;
-        conditions[_idProduit].push(EnregistrementCondition(compteurConditions, _temperature, _humidite, block.timestamp));
+        conditions[_idProduit] = EnregistrementCondition(compteurConditions, _temperature, _humidite, block.timestamp);
         emit ConditionEnregistree(_idProduit, compteurConditions, _temperature, _humidite, block.timestamp);
     }
 

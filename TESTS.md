@@ -62,6 +62,12 @@ Decrit les tests unitaires effectues sur les smart contracts du projet.
 |---------------------------------------|---------------------------------------------------------------|
 | effectuerPaiement()                   | Verifie si l'evenemet PaiementEffectue a ete bien emis        |
 |                                       | Verifie si le payement a ete enregistrer                      |
+|---------------------------------------|---------------------------------------------------------------|
+| valideenregistrerConditionrProduit()  | Verifie si l'evenemet ConditionEnregistree a ete bien         |
+|                                       | Verifie si le condition a ete enregistrer                     |
+|---------------------------------------|---------------------------------------------------------------|
+| mettreAJourStatutTransport()          | Verifie si l'evenemet StatutTransportMisAJour a ete bien      |
+|                                       | Verifie si le statut transport a ete vraiment mise a jour     |
 
 
 ## Les commandes pour executer les tests

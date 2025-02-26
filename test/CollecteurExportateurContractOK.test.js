@@ -3,13 +3,13 @@ const { expect } = require('chai');
 
 describe("CollecteurExportateurContractOK", function () {
     let Contrat, contrat;
-    let addr0, addr1;
+    let addr0, addr1, addr2;
     // pour le contrat ProducteurEnPhaseCulture
     let Pepc, pepc;
     let prod, idParcelle;
 
     this.beforeEach(async function () {
-        [addr0, addr1, prod] = await ethers.getSigners();
+        [addr0, addr1, prod, addr2] = await ethers.getSigners();
         
         // Deploie le contrat ProducteurEnPhaseCulture
         Pepc = await ethers.getContractFactory("contracts/ProducteurEnPhaseCulture.sol:ProducteurEnPhaseCulture");
@@ -150,6 +150,69 @@ describe("CollecteurExportateurContractOK", function () {
             await contrat.connect(exportateur).effectuerPaiement(idCommande, 1000, 0, {value:100});
             const paiement = await contrat.paiements(await contrat.compteurPaiements());
             expect(paiement.montant).to.equal(1000);
+        })
+    });
+
+
+    describe("enregistrerCondition()", function () {
+        let collecteur, transporteur, idProduit;
+        this.beforeEach(async function () {
+            // enregistrer collecteur
+            await contrat.enregistrerActeur(addr0, 0);
+            collecteur = addr0; 
+            // enregistrer transporteur
+            await contrat.enregistrerActeur(addr1, 2);
+            transporteur = addr1; 
+            // enregistrer produit
+            await contrat.connect(collecteur).ajouterProduit(idParcelle, 10, 10);
+            idProduit = await contrat.compteurProduits();
+        });
+
+        it("Verifie si l'evenemet ConditionEnregistree a ete bien", async function () {
+            expect(await contrat.connect(transporteur).enregistrerCondition(idProduit, "temperature", "humidite"))
+                .to.emit(contrat, "ConditionEnregistree");
+        })
+
+        it("Verifie si le condition a ete enregistrer", async function () {
+            await contrat.connect(transporteur).enregistrerCondition(idProduit, "temperature", "humidite")
+            const condition = await contrat.conditions(await contrat.compteurConditions());
+            expect(condition.temperature).to.equal("temperature");
+            expect(condition.humidite).to.equal("humidite");
+        })
+    });
+
+
+    describe("mettreAJourStatutTransport()", function () {
+        let collecteur, exportateur,transporteur,idCommande;
+        this.beforeEach(async function () {
+            // enregistrer collecteur
+            await contrat.enregistrerActeur(addr0, 0);
+            collecteur = addr0; 
+            // enregistrer exportateur
+            await contrat.enregistrerActeur(addr1, 1);
+            exportateur = addr1; 
+            // enregistrer transporteur
+            await contrat.enregistrerActeur(addr2, 2);
+            transporteur = addr2; 
+            // enregistrer produit
+            await contrat.connect(collecteur).ajouterProduit(idParcelle, 10, 10);
+            // valider produit
+            await contrat.connect(exportateur).validerProduit(await contrat.compteurProduits(), true);
+            // enregistre commande
+            await contrat.connect(exportateur).passerCommande(await contrat.compteurProduits(), 10);
+            idCommande = await contrat.compteurCommandes();
+        });
+
+        it("Verifie si l'evenemet StatutTransportMisAJour a ete bien", async function () {
+            expect(await contrat.connect(transporteur).mettreAJourStatutTransport(idCommande, 1))
+                .to.emit(contrat, "StatutTransportMisAJour")
+                .withArgs(idCommande, 1);
+        })
+
+        it("Verifie si le statut transport a ete vraiment mise a jour", async function () {
+            await contrat.connect(transporteur).mettreAJourStatutTransport(idCommande, 1);
+            const commande = await contrat.commandes(idCommande);
+            expect(commande.statutTransport).to.equal(1);
         })
     });
 });
