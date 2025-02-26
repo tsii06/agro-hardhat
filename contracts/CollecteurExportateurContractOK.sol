@@ -54,7 +54,7 @@ contract CollecteurExportateurContrat {
     mapping(uint => EnregistrementCondition[]) public conditions;
     mapping(uint => Paiement[]) public paiements;
     // Pour stocker tous les commandes du contrat
-    mapping (uint => Commande) commandes;
+    mapping (uint => Commande) public commandes;
     uint public compteurCommandes;
     uint public compteurProduits;
     uint public compteurConditions;

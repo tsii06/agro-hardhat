@@ -62,7 +62,35 @@ describe("CollecteurExportateurContractOK", function () {
             expect(produit.nom).to.equal("nomProduit");
             expect(produit.prix).to.equal(10);
             expect(produit.quantite).to.equal(10);
-            console.log(produit.dateRecolte);
+        })
+    });
+
+
+    describe("passerCommande()", function () {
+        let collecteur, exportateur,idProduit;
+        this.beforeEach(async function () {
+            // enregistrer collecteur
+            await contrat.enregistrerActeur(addr0, 0);
+            collecteur = addr0; 
+            // enregistrer exportateur
+            await contrat.enregistrerActeur(addr1, 1);
+            exportateur = addr1; 
+            // enregistrer produit
+            await contrat.connect(collecteur).ajouterProduit(idParcelle, 10, 10);
+            idProduit = await contrat.compteurProduits();
+        });
+
+        it("Verifie si l'evenemet CommandePasser a ete bien emis", async function () {
+            expect(await contrat.connect(exportateur).passerCommande(idProduit, 10))
+                .to.emit(contrat, "CommandePasser")
+                .withArgs(exportateur, idProduit);
+        })
+
+        it("Verifie si la commande a bien ete enregistre", async function () {
+            await contrat.connect(exportateur).passerCommande(idProduit, 10);
+            const commande = await contrat.commandes(await contrat.compteurCommandes());
+            expect(commande.idProduit).to.equal(idProduit);
+            expect(commande.quantite).to.equal(10);
         })
     });
 });

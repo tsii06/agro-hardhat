@@ -53,6 +53,9 @@ Decrit les tests unitaires effectues sur les smart contracts du projet.
 |---------------------------------------|---------------------------------------------------------------|
 | ajouterProduit()                      | Verifie si l'evenemet ProduitAjoute a ete bien emis           |
 |                                       | Verifie si le produit a bien ete enregistre                   |
+|---------------------------------------|---------------------------------------------------------------|
+| passerCommande()                      | Verifie si l'evenemet CommandePasser a ete bien emis          |
+|                                       | Verifie si la commande a bien ete enregistre                  |
 
 
 ## Les commandes pour executer les tests
