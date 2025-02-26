@@ -93,4 +93,32 @@ describe("CollecteurExportateurContractOK", function () {
             expect(commande.quantite).to.equal(10);
         })
     });
+
+
+    describe("validerProduit()", function () {
+        let collecteur, exportateur,idProduit;
+        this.beforeEach(async function () {
+            // enregistrer collecteur
+            await contrat.enregistrerActeur(addr0, 0);
+            collecteur = addr0; 
+            // enregistrer exportateur
+            await contrat.enregistrerActeur(addr1, 1);
+            exportateur = addr1; 
+            // enregistrer produit
+            await contrat.connect(collecteur).ajouterProduit(idParcelle, 10, 10);
+            idProduit = await contrat.compteurProduits();
+        });
+
+        it("Verifie si l'evenemet ProduitValide a ete bien emis", async function () {
+            expect(await contrat.connect(exportateur).validerProduit(idProduit, true))
+                .to.emit(contrat, "ProduitValide")
+                .withArgs(idProduit, true);
+        })
+
+        it("Verifie si le produit a bien ete valider", async function () {
+            await contrat.connect(exportateur).validerProduit(idProduit, true);
+            const produit = await contrat.produits(idProduit);
+            expect(produit.statut).to.equal(1);
+        })
+    });
 });
