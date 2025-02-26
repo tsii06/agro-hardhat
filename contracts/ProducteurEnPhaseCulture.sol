@@ -148,13 +148,13 @@ contract ProducteurEnPhaseCulture {
     function getPhotos(uint idParcelle) public view seulementProducteur returns (string[] memory) {
         return parcelles[idParcelle].photos;
     }
-    function getIntrant(uint idParcelle) public view seulementProducteur returns (Intrant[] memory) {
+    function getIntrants(uint idParcelle) public view seulementProducteur returns (Intrant[] memory) {
         return parcelles[idParcelle].intrants;
     }
-    function getInspection(uint idParcelle) public view seulementProducteur returns (Inspection[] memory) {
+    function getInspections(uint idParcelle) public view seulementProducteur returns (Inspection[] memory) {
         return parcelles[idParcelle].inspections;
     }
-    function getCondition(uint idParcelle) public view seulementProducteur returns (EnregistrementCondition[] memory) {
+    function getConditions(uint idParcelle) public view seulementProducteur returns (EnregistrementCondition[] memory) {
         return parcelles[idParcelle].conditions;
     }
 

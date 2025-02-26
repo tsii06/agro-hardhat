@@ -39,6 +39,9 @@ Decrit les tests unitaires effectues sur les smart contracts du projet.
 | ajouterPhoto()                        | Seul un producteur peut ajouter un photo                      |
 |                                       | Verifie si l'evenemet PhotoAjoutee a ete bien emis            |
 |                                       | Verifie si l'url de la photo a bien ete donnee                |
+|---------------------------------------|---------------------------------------------------------------|
+| ajouterIntrant()                      | Verifie si l'evenemet IntrantAjoute a ete bien emis           |
+|                                       | Verifie si l'intrant a bien ete ajouter                       |
 
 
 ### CollecteurExportateurContractOK

@@ -241,4 +241,34 @@ describe("ProducteurEnPhaseCulture", function () {
             expect(photos[0]).to.equal("urlPhoto");
         })
     });
+
+
+    describe("ajouterIntrant()", function () {
+        let fournisseur, producteur, idParcelle;
+        this.beforeEach(async function () {
+            // enregistrer un fournisseur et un producteur
+            await contrat.enregistrerActeur(addr0, 1);
+            await contrat.enregistrerActeur(addr1, 0);
+            fournisseur = addr0;
+            producteur = addr1;
+            // enregistrer un parcelle
+            await contrat.connect(producteur).creerParcelle("bon", "sur brulis", "latitude", "longitude", "nomProduit", "12/12/25", "certificate");
+
+            idParcelle = await contrat.compteurParcelles();
+        })
+
+        it("Verifie si l'evenemet IntrantAjoute a ete bien emis", async function () {
+            expect(await contrat.connect(fournisseur).ajouterIntrant(idParcelle, "nom", 10))
+                .to.emit(contrat, "IntrantAjoute")
+                .withArgs(idParcelle, "nom", 10);
+        })
+
+        it("Verifie si l'intrant a bien ete ajouter", async function () {
+            await contrat.connect(fournisseur).ajouterIntrant(idParcelle, "nom", 10);
+            const intrant = await contrat.connect(producteur).getIntrants(idParcelle);
+            expect(intrant[0].nom).to.equal("nom");
+            expect(intrant[0].quantite).to.equal(10);
+            expect(intrant[0].valide).to.equal(false);
+        })
+    });
 });
