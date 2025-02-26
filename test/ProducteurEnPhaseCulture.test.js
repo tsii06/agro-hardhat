@@ -4,12 +4,13 @@ const { expect } = require('chai');
 describe("ProducteurEnPhaseCulture", function () {
     let Contrat;
     let contrat;
-    let addr0, addr1;
+    let addr0, addr1, addr2;
     this.beforeEach(async function () {
-        [addr0, addr1] = await ethers.getSigners();
+        [addr0, addr1, addr2] = await ethers.getSigners();
         
         Contrat = await ethers.getContractFactory("contracts/ProducteurEnPhaseCulture.sol:ProducteurEnPhaseCulture");
         contrat = await Contrat.deploy();
+        await contrat.waitForDeployment();
     })
 
 
@@ -91,11 +92,8 @@ describe("ProducteurEnPhaseCulture", function () {
             // creation parcelle
             await contrat.connect(addr1).creerParcelle("bon", "sur brulis", "latitude", "longitude", "nomProduit", "12/12/25", "certificate");
 
-            // faire appel a la fonction mettreAJourEtape() par le producteur
-            const tx = await contrat.connect(addr1).mettreAJourEtape(parseInt(await contrat.compteurParcelles()), 1);
-
             // verifie si l'evenement a bien ete emis
-            expect(tx)
+            await expect(await contrat.connect(addr1).mettreAJourEtape(parseInt(await contrat.compteurParcelles()), 1))
                 .to.emit(contrat, "EtapeMiseAJour")
                 .withArgs(parseInt(await contrat.compteurParcelles()), 1)
         })
@@ -152,7 +150,7 @@ describe("ProducteurEnPhaseCulture", function () {
             // mettre a jour l'etape de culture du parcelle
             await contrat.connect(addr0).mettreAJourEtape(idParcelle, 1);
 
-            expect(contrat.connect(addr1).appliquerControlePhytosanitaire(idParcelle, true))
+            await expect(contrat.connect(addr1).appliquerControlePhytosanitaire(idParcelle, true))
                 .to.emit(contrat, "ControlePhytosanitaire")
                 .withArgs(idParcelle, true);
         })
@@ -204,7 +202,7 @@ describe("ProducteurEnPhaseCulture", function () {
         })
 
         it("Verifie si l'evenemet RecolteConfirmee a ete bien emis", async function () {
-            expect(contrat.connect(certificateur).confirmerRecolte(idParcelle, true))
+            await expect(contrat.connect(certificateur).confirmerRecolte(idParcelle, true))
                 .to.emit(contrat, "RecolteConfirmee")
                 .withArgs(idParcelle, true);
         })
@@ -228,10 +226,9 @@ describe("ProducteurEnPhaseCulture", function () {
         })
         
         it("Verifie si l'evenemet PhotoAjoutee a ete bien emis", async function () {
-            const tx = await contrat.connect(producteur).ajouterPhoto(idParcelle, "urlPhoto");
-            expect(tx)
-            .to.emit(contrat, "PhotoAjoutee")
-            .withArgs(idParcelle, "urlPhoto");
+            await expect(contrat.connect(producteur).ajouterPhoto(idParcelle, "urlPhoto"))
+                .to.emit(contrat, "PhotoAjoutee")
+                .withArgs(idParcelle, "urlPhoto");
         })
         
         it("Verifie si l'url de la photo a bien ete donnee", async function () {
@@ -255,10 +252,10 @@ describe("ProducteurEnPhaseCulture", function () {
             await contrat.connect(producteur).creerParcelle("bon", "sur brulis", "latitude", "longitude", "nomProduit", "12/12/25", "certificate");
 
             idParcelle = await contrat.compteurParcelles();
-        })
+        });
 
         it("Verifie si l'evenemet IntrantAjoute a ete bien emis", async function () {
-            expect(await contrat.connect(fournisseur).ajouterIntrant(idParcelle, "nom", 10))
+            await expect(contrat.connect(fournisseur).ajouterIntrant(idParcelle, "nom", 10))
                 .to.emit(contrat, "IntrantAjoute")
                 .withArgs(idParcelle, "nom", 10);
         })
@@ -269,6 +266,32 @@ describe("ProducteurEnPhaseCulture", function () {
             expect(intrant[0].nom).to.equal("nom");
             expect(intrant[0].quantite).to.equal(10);
             expect(intrant[0].valide).to.equal(false);
+        })
+    });
+
+
+    describe("validerIntrant()", function () {
+        let certificateur, producteur,fournisseur, idParcelle;
+        this.beforeEach(async function () {
+            // enregistrer un certificateur et un producteur et certificateur
+            await contrat.enregistrerActeur(addr0, 0);
+            await contrat.enregistrerActeur(addr1, 1);
+            await contrat.enregistrerActeur(addr2, 2);
+            producteur = addr0;
+            fournisseur = addr1;
+            certificateur = addr2;
+            // enregistrer un parcelle
+            await contrat.connect(producteur).creerParcelle("bon", "sur brulis", "latitude", "longitude", "nomProduit", "12/12/25", "certificate");
+
+            idParcelle = await contrat.compteurParcelles();
+            // ajouter intrant a parcelle
+            await contrat.connect(fournisseur).ajouterIntrant(idParcelle, "nom", 10);
+        });
+
+        it("Verifie si l'evenemet IntrantValide a ete bien emis", async function () {
+            await expect(contrat.connect(certificateur).validerIntrant(idParcelle, "nom", true))
+                .to.emit(contrat, "IntrantValide")
+                .withArgs(idParcelle, "nom", true);
         })
     });
 });

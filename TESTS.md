@@ -42,6 +42,8 @@ Decrit les tests unitaires effectues sur les smart contracts du projet.
 |---------------------------------------|---------------------------------------------------------------|
 | ajouterIntrant()                      | Verifie si l'evenemet IntrantAjoute a ete bien emis           |
 |                                       | Verifie si l'intrant a bien ete ajouter                       |
+|---------------------------------------|---------------------------------------------------------------|
+| validerIntrant()                      | Verifie si l'evenemet IntrantValide a ete bien emis           |
 
 
 ### CollecteurExportateurContractOK
@@ -68,6 +70,7 @@ Decrit les tests unitaires effectues sur les smart contracts du projet.
 |---------------------------------------|---------------------------------------------------------------|
 | mettreAJourStatutTransport()          | Verifie si l'evenemet StatutTransportMisAJour a ete bien      |
 |                                       | Verifie si le statut transport a ete vraiment mise a jour     |
+|---------------------------------------|---------------------------------------------------------------|
 
 
 ## Les commandes pour executer les tests
