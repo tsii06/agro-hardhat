@@ -226,5 +226,19 @@ describe("ProducteurEnPhaseCulture", function () {
         it("Seul un producteur peut ajouter un photo", async function () {
             await contrat.connect(producteur).ajouterPhoto(idParcelle, "urlPhoto");
         })
+        
+        it("Verifie si l'evenemet PhotoAjoutee a ete bien emis", async function () {
+            const tx = await contrat.connect(producteur).ajouterPhoto(idParcelle, "urlPhoto");
+            expect(tx)
+            .to.emit(contrat, "PhotoAjoutee")
+            .withArgs(idParcelle, "urlPhoto");
+        })
+        
+        it("Verifie si l'url de la photo a bien ete donnee", async function () {
+            await contrat.connect(producteur).ajouterPhoto(idParcelle, "urlPhoto");
+            // recuperer tous les photos
+            const photos = await contrat.getPhotos(idParcelle);
+            expect(photos[0]).to.equal("urlPhoto");
+        })
     });
 });

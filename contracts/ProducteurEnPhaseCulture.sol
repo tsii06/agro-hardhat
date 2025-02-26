@@ -144,6 +144,11 @@ contract ProducteurEnPhaseCulture {
         emit ParcelleCree(compteurParcelles, _latitude, _longitude);
     }
 
+    // les getters
+    function getPhotos(uint idParcelle) public view seulementProducteur returns (string[] memory) {
+        return parcelles[idParcelle].photos;
+    }
+
     function mettreAJourEtape(uint _idParcelle, Etape _etape) public seulementProducteur {
         parcelles[_idParcelle].etape = _etape;
         emit EtapeMiseAJour(_idParcelle, _etape);

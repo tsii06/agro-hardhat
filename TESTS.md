@@ -37,6 +37,8 @@ Decrit les tests unitaires effectues sur les smart contracts du projet.
 |                                       | Verifie si l'evenemet RecolteConfirmee a ete bien emis        |
 |---------------------------------------|---------------------------------------------------------------|
 | ajouterPhoto()                        | Seul un producteur peut ajouter un photo                      |
+|                                       | Verifie si l'evenemet PhotoAjoutee a ete bien emis            |
+|                                       | Verifie si l'url de la photo a bien ete donnee                |
 
 
 ### CollecteurExportateurContractOK
