@@ -1,5 +1,6 @@
 const { ethers } = require('hardhat');
 const { expect } = require('chai');
+const { int } = require('hardhat/internal/core/params/argumentTypes');
 
 describe("ProducteurEnPhaseCulture", function () {
     let Contrat;
@@ -292,6 +293,12 @@ describe("ProducteurEnPhaseCulture", function () {
             await expect(contrat.connect(certificateur).validerIntrant(idParcelle, "nom", true))
                 .to.emit(contrat, "IntrantValide")
                 .withArgs(idParcelle, "nom", true);
+        })
+
+        it("Verifie si l'intrant a bien ete valider", async function () {
+            await contrat.connect(certificateur).validerIntrant(idParcelle, "nom", true);
+            const intrants = await contrat.getIntrants(idParcelle);
+            expect(intrants[0].valide).to.equal(true);
         })
     });
 });

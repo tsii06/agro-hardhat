@@ -44,6 +44,7 @@ Decrit les tests unitaires effectues sur les smart contracts du projet.
 |                                       | Verifie si l'intrant a bien ete ajouter                       |
 |---------------------------------------|---------------------------------------------------------------|
 | validerIntrant()                      | Verifie si l'evenemet IntrantValide a ete bien emis           |
+|                                       | Verifie si l'intrant a bien ete valider                       |
 
 
 ### CollecteurExportateurContractOK
