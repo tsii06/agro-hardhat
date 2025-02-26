@@ -121,4 +121,35 @@ describe("CollecteurExportateurContractOK", function () {
             expect(produit.statut).to.equal(1);
         })
     });
+
+
+    describe("effectuerPaiement()", function () {
+        let collecteur, exportateur,idCommande;
+        this.beforeEach(async function () {
+            // enregistrer collecteur
+            await contrat.enregistrerActeur(addr0, 0);
+            collecteur = addr0; 
+            // enregistrer exportateur
+            await contrat.enregistrerActeur(addr1, 1);
+            exportateur = addr1; 
+            // enregistrer produit
+            await contrat.connect(collecteur).ajouterProduit(idParcelle, 10, 10);
+            // valider produit
+            await contrat.connect(exportateur).validerProduit(await contrat.compteurProduits(), true);
+            // enregistre commande
+            await contrat.connect(exportateur).passerCommande(await contrat.compteurProduits(), 10);
+            idCommande = await contrat.compteurCommandes();
+        });
+
+        it("Verifie si l'evenemet PaiementEffectue a ete bien emis", async function () {
+            expect(await contrat.connect(exportateur).effectuerPaiement(idCommande, 1000, 0, {value:100}))
+                .to.emit(contrat, "PaiementEffectue");
+        })
+
+        it("Verifie si le payement a ete enregistrer", async function () {
+            await contrat.connect(exportateur).effectuerPaiement(idCommande, 1000, 0, {value:100});
+            const paiement = await contrat.paiements(await contrat.compteurPaiements());
+            expect(paiement.montant).to.equal(1000);
+        })
+    });
 });

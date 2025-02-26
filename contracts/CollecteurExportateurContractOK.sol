@@ -52,7 +52,7 @@ contract CollecteurExportateurContrat {
     mapping(address => Acteur) public acteurs;
     mapping(uint => Produit) public produits;
     mapping(uint => EnregistrementCondition[]) public conditions;
-    mapping(uint => Paiement[]) public paiements;
+    mapping(uint => Paiement) public paiements;
     // Pour stocker tous les commandes du contrat
     mapping (uint => Commande) public commandes;
     uint public compteurCommandes;
@@ -133,10 +133,10 @@ contract CollecteurExportateurContrat {
     function effectuerPaiement(uint _idCommande, uint _montant, ModePaiement _mode) public payable seulementExportateur {
         Produit memory _produit = produits[commandes[_idCommande].idProduit];
         require(_produit.statut == StatutProduit.Valide, "Produit non valide");
-        require(msg.value == _produit.prix * _produit.quantite, "Montant incorrect");
+        require(msg.value == _produit.prix * commandes[_idCommande].quantite, "Montant incorrect");
 
         compteurPaiements++;
-        paiements[compteurPaiements].push(Paiement(compteurPaiements, msg.sender, _montant, _mode, block.timestamp));
+        paiements[compteurPaiements] = Paiement(compteurPaiements, msg.sender, _montant, _mode, block.timestamp);
         emit PaiementEffectue(_produit.id, compteurPaiements, msg.sender, _montant, _mode);
 
         address payable collecteur = payable(_produit.collecteur);
