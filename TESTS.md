@@ -51,6 +51,9 @@ Decrit les tests unitaires effectues sur les smart contracts du projet.
 |---------------------------------------|---------------------------------------------------------------|
 | enregistrerCondition()                | Verifie si l'evenemet ConditionEnregistree a ete bien emis    |
 |                                       | Verifie si la condition a bien ete ajouter au parcelle        |
+|---------------------------------------|---------------------------------------------------------------|
+| effectuerPaiement()                   | Verifie si l'evenemet PaiementEffectue a ete bien emis        |
+|                                       | Verifie si le paiement a bien ete effecuter                   |
 
 
 ### CollecteurExportateurContractOK

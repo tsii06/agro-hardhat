@@ -356,4 +356,32 @@ describe("ProducteurEnPhaseCulture", function () {
             expect(conditions[0].humidite).to.equal("humidite");
         })
     });
+
+
+    describe("effectuerPaiement()", function () {
+        let producteur, collecteur;
+        let idParcelle;
+        this.beforeEach(async function () {
+            // enregistrer producteur et collecteur
+            await contrat.enregistrerActeur(addr0, 0);
+            await contrat.enregistrerActeur(addr1, 3);
+            producteur = addr0;
+            collecteur = addr1;
+            // enregistrer parcelle
+            await contrat.connect(producteur).creerParcelle("bon", "sur brulis", "latitude", "longitude", "nomProduit", "12/12/25", "certificate");
+            idParcelle = await contrat.compteurParcelles();
+        })
+
+        it("Verifie si l'evenemet PaiementEffectue a ete bien emis", async function () {
+            await expect(contrat.connect(collecteur).effectuerPaiement(idParcelle, 1000, 0, {value:100}))
+                .to.emit(contrat, "PaiementEffectue");
+        })
+
+        it("Verifie si le paiement a bien ete effecuter", async function () {
+            await contrat.connect(collecteur).effectuerPaiement(idParcelle, 1000, 0, {value:100});
+            const paiement = await contrat.paiements(await contrat.compteurPaiements());
+            expect(paiement.montant).to.equal(1000);
+            expect(paiement.payeur).to.equal(collecteur);
+        })
+    });
 });

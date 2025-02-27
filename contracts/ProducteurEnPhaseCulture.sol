@@ -59,7 +59,7 @@ contract ProducteurEnPhaseCulture {
 
     mapping(address => Acteur) public acteurs;
     mapping(uint => Parcelle) public parcelles;
-    mapping(uint => Paiement[]) public paiements;
+    mapping(uint => Paiement) public paiements;
     uint public compteurParcelles;
     uint public compteurInspections;
     uint public compteurConditions;
@@ -208,7 +208,7 @@ contract ProducteurEnPhaseCulture {
 
     function effectuerPaiement(uint _idParcelle, uint _montant, ModePaiement _mode) public payable seulementCollecteur {
         compteurPaiements++;
-        paiements[_idParcelle].push(Paiement(compteurPaiements, msg.sender, _montant, _mode, block.timestamp));
+        paiements[_idParcelle] = Paiement(compteurPaiements, msg.sender, _montant, _mode, block.timestamp);
         emit PaiementEffectue(_idParcelle, compteurPaiements, msg.sender, _montant, _mode, block.timestamp);
     }
 
