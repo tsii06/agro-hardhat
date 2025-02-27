@@ -301,4 +301,31 @@ describe("ProducteurEnPhaseCulture", function () {
             expect(intrants[0].valide).to.equal(true);
         })
     });
+
+
+    describe("ajouterInspection()", function () {
+        let producteur, auditeur;
+        let idParcelle;
+        this.beforeEach(async function () {
+            // enregistrer producteur et auditeur
+            await contrat.enregistrerActeur(addr0, 0);
+            await contrat.enregistrerActeur(addr1, 4);
+            producteur = addr0;
+            auditeur = addr1;
+            // enregistrer parcelle
+            await contrat.connect(producteur).creerParcelle("bon", "sur brulis", "latitude", "longitude", "nomProduit", "12/12/25", "certificate");
+            idParcelle = await contrat.compteurParcelles();
+        })
+
+        it("Verifie si l'evenemet InspectionAjoutee a ete bien emis", async function () {
+            await expect(contrat.connect(auditeur).ajouterInspection(idParcelle, "rapport"))
+                .to.emit(contrat, "InspectionAjoutee");
+        })
+
+        it("Verifie si l'inspection a bien ete ajouter au parcelle", async function () {
+            await contrat.connect(auditeur).ajouterInspection(idParcelle, "rapport");
+            const inspections = await contrat.getInspections(idParcelle);
+            expect(inspections[0].rapport).to.equal("rapport");
+        })
+    });
 });
