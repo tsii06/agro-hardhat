@@ -328,4 +328,32 @@ describe("ProducteurEnPhaseCulture", function () {
             expect(inspections[0].rapport).to.equal("rapport");
         })
     });
+
+
+    describe("enregistrerCondition", function () {
+        let producteur, transporteur;
+        let idParcelle;
+        this.beforeEach(async function () {
+            // enregistrer producteur et transporteur
+            await contrat.enregistrerActeur(addr0, 0);
+            await contrat.enregistrerActeur(addr1, 5);
+            producteur = addr0;
+            transporteur = addr1;
+            // enregistrer parcelle
+            await contrat.connect(producteur).creerParcelle("bon", "sur brulis", "latitude", "longitude", "nomProduit", "12/12/25", "certificate");
+            idParcelle = await contrat.compteurParcelles();
+        })
+
+        it("Verifie si l'evenemet ConditionEnregistree a ete bien emis", async function () {
+            await expect(contrat.connect(transporteur).enregistrerCondition(idParcelle, "temperature", "humidite"))
+                .to.emit(contrat, "ConditionEnregistree");
+        })
+
+        it("Verifie si la condition a bien ete ajouter au parcelle", async function () {
+            await contrat.connect(transporteur).enregistrerCondition(idParcelle, "temperature", "humidite");
+            const conditions = await contrat.getConditions(idParcelle);
+            expect(conditions[0].temperature).to.equal("temperature");
+            expect(conditions[0].humidite).to.equal("humidite");
+        })
+    });
 });

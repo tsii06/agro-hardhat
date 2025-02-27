@@ -49,6 +49,8 @@ Decrit les tests unitaires effectues sur les smart contracts du projet.
 | ajouterInspection()                   | Verifie si l'evenemet InspectionAjoutee a ete bien emis       |
 |                                       | Verifie si l'inspection a bien ete ajouter au parcelle        |
 |---------------------------------------|---------------------------------------------------------------|
+| enregistrerCondition()                | Verifie si l'evenemet ConditionEnregistree a ete bien emis    |
+|                                       | Verifie si la condition a bien ete ajouter au parcelle        |
 
 
 ### CollecteurExportateurContractOK
