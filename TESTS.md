@@ -54,6 +54,9 @@ Decrit les tests unitaires effectues sur les smart contracts du projet.
 |---------------------------------------|---------------------------------------------------------------|
 | effectuerPaiement()                   | Verifie si l'evenemet PaiementEffectue a ete bien emis        |
 |                                       | Verifie si le paiement a bien ete effecuter                   |
+|---------------------------------------|---------------------------------------------------------------|
+| obtenirInformationsParcelle()         | Verifie s'il retourne tous les infos                          |
+|---------------------------------------|---------------------------------------------------------------|
 
 
 ### CollecteurExportateurContractOK

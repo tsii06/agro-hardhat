@@ -384,4 +384,37 @@ describe("ProducteurEnPhaseCulture", function () {
             expect(paiement.payeur).to.equal(collecteur);
         })
     });
+
+
+    describe("obtenirInformationsParcelle()", function () {
+        let producteur;
+        let idParcelle;
+        this.beforeEach(async function () {
+            // enregistrer producteur et collecteur
+            await contrat.enregistrerActeur(addr0, 0);
+            producteur = addr0;
+            // enregistrer parcelle
+            await contrat.connect(producteur).creerParcelle("bon", "sur brulis", "latitude", "longitude", "nomProduit", "12/12/25", "certificate");
+            idParcelle = await contrat.compteurParcelles();
+        });
+
+        it("Verifie s'il retourne tous les infos", async function () {
+            const [
+                qualiteSemence,
+                methodeCulture,
+                latitude,
+                longitude,
+                produit,
+                dateRecolte,
+                certificatPhytosanitaire
+            ] = await contrat.obtenirInformationsParcelle(idParcelle);
+            expect(qualiteSemence).to.equal("bon");
+            expect(methodeCulture).to.equal("sur brulis");
+            expect(latitude).to.equal("latitude");
+            expect(longitude).to.equal("longitude");
+            expect(produit).to.equal("nomProduit");
+            expect(dateRecolte).to.equal("12/12/25");
+            expect(certificatPhytosanitaire).to.equal("certificate");
+        })
+    });
 });
