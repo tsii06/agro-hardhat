@@ -113,6 +113,18 @@ Decrit les tests unitaires effectues sur les smart contracts du projet.
 |---------------------------------------|---------------------------------------------------------------|
 | ajouterIntrant()                      | Verifie si l'event IntrantAjoute a bien ete emis              |
 |                                       | Verifie si l'intrant a ete ajouter                            |
+|---------------------------------------|---------------------------------------------------------------|
+| validerIntrant()                      | Verifie si l'event IntrantValide a bien ete emis              |
+|                                       | Verifie si l'intrant a ete valider                            |
+|---------------------------------------|---------------------------------------------------------------|
+| ajouterInspection()                   | Verifie si l'event InspectionAjoutee a bien ete emis          |
+|                                       | Verifie si l'inspection a ete ajouter                         |
+|---------------------------------------|---------------------------------------------------------------|
+| enregistrerCondition()                | Verifie si l'event ConditionEnregistree a bien ete emis       |
+|                                       | Verifie si l'enregistrement a bien ete enregistrer            |
+|---------------------------------------|---------------------------------------------------------------|
+| enregistrerPaiement()                 | Verifie si l'event PaiementEnregistre a bien ete emis         |
+|                                       | Verifie si le paiement a bien ete enregistrer                 |
 
 
 

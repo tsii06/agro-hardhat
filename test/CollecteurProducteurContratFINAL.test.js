@@ -189,4 +189,110 @@ describe("CollecteurProducteurContratFINAL", function () {
             expect(intrants[0].quantite).to.equal(10);
         })
     });
+
+
+    describe("validerIntrant()", async function () {
+        let producteur,collecteur,certificateur, idParcelle;
+        this.beforeEach(async function () {
+            // enregistrer producteur
+            await con.enregistrerActeur(addr0, 0);
+            await con.enregistrerActeur(addr1, 1);
+            await con.enregistrerActeur(addr2, 2);
+            producteur = addr0;
+            collecteur = addr1;
+            certificateur = addr2;
+            // enregistrer parcelle
+            await con.connect(producteur).creerParcelle("bon", "sur brulis", "latitude", "longitude", "nomProduit", "12/12/25", "certificate");
+            idParcelle = await con.compteurParcelles();
+            // ajouter intrant
+            await con.connect(collecteur).ajouterIntrant(idParcelle, "nom", 10);
+        })
+
+        it("Verifie si l'event IntrantValide a bien ete emis", async function () {
+            await expect(con.connect(certificateur).validerIntrant(idParcelle, "nom", true))
+                .to.emit(con, "IntrantValide")
+                .withArgs(idParcelle, "nom", true);
+        })
+        it("Verifie si l'intrant a ete valider", async function () {
+            await con.connect(certificateur).validerIntrant(idParcelle, "nom", true);
+            const intrants = await con.getIntrants(idParcelle);
+            expect(intrants[0].valide).to.equal(true);
+        })
+    })
+
+
+    describe("ajouterInspection()", function () {
+        let producteur,transporteur, idParcelle;
+        this.beforeEach(async function () {
+            // enregistrer producteur
+            await con.enregistrerActeur(addr0, 0);
+            await con.enregistrerActeur(addr1, 3);
+            producteur = addr0;
+            transporteur = addr1;
+            // enregistrer parcelle
+            await con.connect(producteur).creerParcelle("bon", "sur brulis", "latitude", "longitude", "nomProduit", "12/12/25", "certificate");
+            idParcelle = await con.compteurParcelles();
+        })
+
+        it("Verifie si l'event InspectionAjoutee a bien ete emis", async function () {
+            await expect(con.connect(transporteur).ajouterInspection(idParcelle, "rapport"))
+                .to.emit(con, "InspectionAjoutee");
+        })
+        it("Verifie si l'inspection a ete ajouter", async function () {
+            await con.connect(transporteur).ajouterInspection(idParcelle, "rapport");
+            const inspections = await con.getInspections(idParcelle);
+            expect(inspections[0].auditeur).to.equal(transporteur);
+            expect(inspections[0].rapport).to.equal("rapport");
+        })
+    });
+
+
+    describe("enregistrerCondition()", function () {
+        let producteur,transporteur, idParcelle;
+        this.beforeEach(async function () {
+            // enregistrer producteur
+            await con.enregistrerActeur(addr0, 0);
+            await con.enregistrerActeur(addr1, 3);
+            producteur = addr0;
+            transporteur = addr1;
+            // enregistrer parcelle
+            await con.connect(producteur).creerParcelle("bon", "sur brulis", "latitude", "longitude", "nomProduit", "12/12/25", "certificate");
+            idParcelle = await con.compteurParcelles();
+        })
+
+        it("Verifie si l'event ConditionEnregistree a bien ete emis", async function () {
+            await expect(con.connect(transporteur).enregistrerCondition(idParcelle, "temperature", "humidite"))
+                .to.emit(con, "ConditionEnregistree");
+        })
+        it("Verifie si l'enregistrement a bien ete enregistrer", async function () {
+            await con.connect(transporteur).enregistrerCondition(idParcelle, "temperature", "humidite");
+            const conditions = await con.getConditions(idParcelle);
+            expect(conditions[0].temperature).to.equal("temperature");
+            expect(conditions[0].humidite).to.equal("humidite");
+        })
+    });
+
+
+    describe("enregistrerPaiement()", function () {
+        let producteur, idParcelle;
+        this.beforeEach(async function () {
+            // enregistrer producteur
+            await con.enregistrerActeur(addr0, 0);
+            producteur = addr0;
+            // enregistrer parcelle
+            await con.connect(producteur).creerParcelle("bon", "sur brulis", "latitude", "longitude", "nomProduit", "12/12/25", "certificate");
+            idParcelle = await con.compteurParcelles();
+        })
+
+        it("Verifie si l'event PaiementEnregistre a bien ete emis", async function () {
+            await expect(con.enregistrerPaiement(idParcelle, 1000, 0))
+                .to.emit(con, "PaiementEnregistre");
+        })
+        it("Verifie si le paiement a bien ete enregistrer", async function () {
+            await con.enregistrerPaiement(idParcelle, 1000, 0);
+            const paiements = await con.getPaiements(idParcelle);
+            expect(paiements[0].montant).to.equal(1000);
+            expect(paiements[0].mode).to.equal(0);
+        })
+    });
 });
