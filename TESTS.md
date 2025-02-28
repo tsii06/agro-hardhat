@@ -8,6 +8,7 @@ Decrit les tests unitaires effectues sur les smart contracts du projet.
 ## Smart contracts Testes
 - **CollecteurExportateurContractOK.sol**
 - **ProducteurEnPhaseCulture.sol**
+- **CollecteurProducteurContratFINAL.sol**
 
 
 ## Tests effectues
@@ -84,6 +85,35 @@ Decrit les tests unitaires effectues sur les smart contracts du projet.
 | mettreAJourStatutTransport()          | Verifie si l'evenemet StatutTransportMisAJour a ete bien      |
 |                                       | Verifie si le statut transport a ete vraiment mise a jour     |
 |---------------------------------------|---------------------------------------------------------------|
+
+
+### CollecteurProducteurContratFINAL
+|-------------------------------------------------------------------------------------------------------|
+| **Fonction**                          | **Description du test**                                       |
+|---------------------------------------|---------------------------------------------------------------|
+| enregistrerActeur()                   | Verifie si l'event ActeurEnregistre a bien ete emis           |
+|                                       | Verifie si l'acteur a bien ete enregistrer                    |
+|---------------------------------------|---------------------------------------------------------------|
+| creerParcelle()                       | Verifie si l'event SemenceValidee a bien ete emis             |
+|                                       | Verifie si l'event MethodeCultureFixee a bien ete emis        |
+|                                       | Verifie si l'event ParcelleCree a bien ete emis               |
+|                                       | Verifie si le parcelle a bien ete enregistrer                 |
+|---------------------------------------|---------------------------------------------------------------|
+| mettreAJourEtape()                    | Verifie si l'event EtapeMiseAJour a bien ete emis             |
+|                                       | Verifie si l'etape a bien ete mise a jour                     |
+|---------------------------------------|---------------------------------------------------------------|
+| appliquerControlePhytosanitaire()     | Verifie si l'event ControlePhytosanitaire a bien ete emis     |
+|                                       | Verifie si le parcelle a bien ete certifier                   |
+|---------------------------------------|---------------------------------------------------------------|
+| confirmerRecolte()                    | Verifie si l'event RecolteConfirmee a bien ete emis           |
+|                                       | Verifie si la recolte a bien ete confirmer                    |
+|---------------------------------------|---------------------------------------------------------------|
+| ajouterPhoto()                        | Verifie si l'event PhotoAjoutee a bien ete emis               |
+|                                       | Verifie si la photo a ete ajouter                             |
+|---------------------------------------|---------------------------------------------------------------|
+| ajouterIntrant()                      | Verifie si l'event IntrantAjoute a bien ete emis              |
+|                                       | Verifie si l'intrant a ete ajouter                            |
+
 
 
 ## Les commandes pour executer les tests

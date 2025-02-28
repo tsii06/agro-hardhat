@@ -49,7 +49,7 @@ contract CollecteurProducteurContratFINAL {
         string latitude;
         string longitude;
         string produit;
-        uint dateRecolte;
+        string dateRecolte;
         string certificatPhytosanitaire;
         string[] photos;
         Intrant[] intrants;
@@ -100,6 +100,24 @@ contract CollecteurProducteurContratFINAL {
     }
 
 
+    // les setters pour les tableaux dynamique du parcelle
+    function getPhotos(uint _idParcelle) public view returns (string[] memory) {
+        return parcelles[_idParcelle].photos;
+    }
+    function getIntrants(uint _idParcelle) public view returns (Intrant[] memory) {
+        return parcelles[_idParcelle].intrants;
+    }
+    function getInspections(uint _idParcelle) public view returns (Inspection[] memory) {
+        return parcelles[_idParcelle].inspections;
+    }
+    function getPaiements(uint _idParcelle) public view returns (Paiement[] memory) {
+        return parcelles[_idParcelle].paiements;
+    }
+    function getConditions(uint _idParcelle) public view returns (EnregistrementCondition[] memory) {
+        return parcelles[_idParcelle].conditions;
+    }
+    
+
     function enregistrerActeur(address _acteur, Role _role) public {
         acteurs[_acteur] = Acteur(_acteur, _role);
         emit ActeurEnregistre(_acteur, _role);
@@ -111,7 +129,7 @@ contract CollecteurProducteurContratFINAL {
         string memory _latitude,
         string memory _longitude,
         string memory _produit,
-        uint _dateRecolte,
+        string memory _dateRecolte,
         string memory _certificatPhytosanitaire
     ) public seulementProducteur {
         compteurParcelles++;
