@@ -125,6 +125,7 @@ Decrit les tests unitaires effectues sur les smart contracts du projet.
 |---------------------------------------|---------------------------------------------------------------|
 | enregistrerPaiement()                 | Verifie si l'event PaiementEnregistre a bien ete emis         |
 |                                       | Verifie si le paiement a bien ete enregistrer                 |
+|---------------------------------------|---------------------------------------------------------------|
 
 
 
