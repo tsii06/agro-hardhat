@@ -1,4 +1,5 @@
-const { ethers, network } = require("hardhat");
+const { ethers } = require('hardhat');
+const { expect } = require('chai');
 
 describe("Reset Blockchain", function () {
     it("Devrait réinitialiser la blockchain locale", async function () {
